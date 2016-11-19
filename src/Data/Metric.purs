@@ -2,6 +2,7 @@
 module Data.Metric
 ( class Metric
 , distance
+, neighborhood
 ) where
 
 import Data.Ord (abs)
@@ -27,3 +28,7 @@ instance metricInt :: Metric Int Int where
 
 instance metricNumber :: Metric Number Number where
     distance a b = abs $ a - b
+
+-- | `neighborhood ε p` returns the points within a distance of `ε` from `p`.
+neighborhood :: ∀ a d. (Metric a d) => d -> a -> a -> Boolean
+neighborhood ε p = \q -> distance p q < ε
