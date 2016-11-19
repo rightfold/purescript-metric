@@ -1,0 +1,3 @@
+# purescript-metric
+
+Metric spaces.
