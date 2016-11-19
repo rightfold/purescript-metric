@@ -4,27 +4,26 @@ module Data.Metric
 , distance
 ) where
 
-import Data.Int as Int
 import Data.Ord (abs)
 import Prelude
 
 -- | Instances must satisfy the following laws:
 -- |
--- |  - Separation: `distance x y >= 0.0`
--- |  - Identity of indiscernibles: `distance x y == 0.0` iff `x` = `y`
+-- |  - Separation: `distance x y >= zero`
+-- |  - Identity of indiscernibles: `distance x y == zero` iff `x` = `y`
 -- |  - Symmetry: `distance x y == distance y x`
 -- |  - Subadditivity: `distance x y =< distance x y + distance y z`
-class Metric a where
-    distance :: a -> a -> Number
+class (Semiring d, Ord d) <= Metric a d | a -> d where
+    distance :: a -> a -> d
 
-instance metricVoid :: Metric Void where
+instance metricVoid :: (Semiring d, Ord d) => Metric Void d where
     distance _ = absurd
 
-instance metricUnit :: Metric Unit where
-    distance _ _ = 0.0
+instance metricUnit :: (Semiring d, Ord d) => Metric Unit d where
+    distance _ _ = zero
 
-instance metricInt :: Metric Int where
-    distance a b = Int.toNumber $ abs $ a - b
+instance metricInt :: Metric Int Int where
+    distance a b = abs $ a - b
 
-instance metricNumber :: Metric Number where
+instance metricNumber :: Metric Number Number where
     distance a b = abs $ a - b
